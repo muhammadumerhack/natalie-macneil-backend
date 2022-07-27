@@ -35,23 +35,25 @@ class AuthController extends Controller
                 'message'=> 'Credentials Not Matched'
             ],401);
         }
-        $otpInitiate = new Otp;
-        $otpObj = $otpInitiate->generate($request->email, 6, 5);
-        $otpObj->status == true ? $otp = $otpObj->token:$otp =null;
-        if($otp != null){
+        // $otpInitiate = new Otp;
+        // $otpObj = $otpInitiate->generate($request->email, 6, 5);
+        // $otpObj->status == true ? $otp = $otpObj->token:$otp =null;
+        // if($otp != null){
 
-            $object_arr = array('to'=>$request->email,'name'=>$user->name,'code'=>$otp,'userName'=>'','password'=>'');
-            Mail::send('mail', $object_arr, function($message) use ($object_arr){
-                $message->to($object_arr['to'], $object_arr['name'])->subject('Verify Otp');
-                $message->from('no-reply@nasenicertveri.com','Naseni Certveri'); 
-             });
+        //     $object_arr = array('to'=>$request->email,'name'=>$user->name,'code'=>$otp,'userName'=>'','password'=>'');
+        //     Mail::send('mail', $object_arr, function($message) use ($object_arr){
+        //         $message->to($object_arr['to'], $object_arr['name'])->subject('Verify Otp');
+        //         $message->from('no-reply@nasenicertveri.com','Naseni Certveri'); 
+        //      });
 
-            // $this->sendMail('Verify Otp',array('to'=>$request->email,'name'=>$user->name,'code'=>$otp));
-        }
+        //     // $this->sendMail('Verify Otp',array('to'=>$request->email,'name'=>$user->name,'code'=>$otp));
+        // }
         $token = $user->createToken('myapptoken')->plainTextToken;
         return response()->json([
-            'message'=>'Check Your Email',
-            'email'=>$user->email
+            'status'=>true,
+            'message'=>'User Logged in',
+            'user'=>$user,
+            'token'=>$token
         ],200);
 
     }
