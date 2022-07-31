@@ -33,6 +33,7 @@ class UserController extends Controller
             'username'=>'required|string|unique:users,username',
             'email'=>'required|string|unique:users,email',
             'password'=>'required|string|confirmed',
+            'role_id'=>'required'
 
         ]);
 
@@ -48,6 +49,7 @@ class UserController extends Controller
             'email'=>$request->email,
             'password'=>  bcrypt($password),
             'status'=>$request->status?$request->status:null,
+            'role_id'=>$request->role_id?$request->role_id:null,
         ] );
         return response()->json([
             'message'=>'User Created',

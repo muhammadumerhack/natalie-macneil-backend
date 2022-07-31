@@ -67,6 +67,7 @@ class AuthController extends Controller
             'email'=>$request->email,
             'password'=>  bcrypt($password),
             'role_id'=>  $request->role_id,
+            'status'=>  'active',
         ] );
         return response()->json([
             'message'=>'User Created',
