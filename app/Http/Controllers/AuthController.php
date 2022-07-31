@@ -7,8 +7,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
-use Otp;
-use Mail;
 class AuthController extends Controller
 {
     /**
@@ -35,19 +33,6 @@ class AuthController extends Controller
                 'message'=> 'Credentials Not Matched'
             ],401);
         }
-        // $otpInitiate = new Otp;
-        // $otpObj = $otpInitiate->generate($request->email, 6, 5);
-        // $otpObj->status == true ? $otp = $otpObj->token:$otp =null;
-        // if($otp != null){
-
-        //     $object_arr = array('to'=>$request->email,'name'=>$user->name,'code'=>$otp,'userName'=>'','password'=>'');
-        //     Mail::send('mail', $object_arr, function($message) use ($object_arr){
-        //         $message->to($object_arr['to'], $object_arr['name'])->subject('Verify Otp');
-        //         $message->from('no-reply@nasenicertveri.com','Naseni Certveri'); 
-        //      });
-
-        //     // $this->sendMail('Verify Otp',array('to'=>$request->email,'name'=>$user->name,'code'=>$otp));
-        // }
         $token = $user->createToken('myapptoken')->plainTextToken;
         return response()->json([
             'status'=>true,
@@ -57,68 +42,41 @@ class AuthController extends Controller
         ],200);
 
     }
-    public function verifyOtp(Request $request){
+
+    public function register(Request $request){
 
         $validator = Validator::make($request->all(),[
-            'email' => 'required|email',
-            'otp' => 'required|string',
-            'password'=>'required|string' 
+            'first_name'=>'required|string',
+            'last_name'=>'required|string',
+            'email'=>'required|string|unique:users,email',
+            'password'=>'required|string|confirmed',
+            'invite_code'=>'required|string',
+            'role_id'=>'required',
         ]);
 
         if($validator->fails()){
             return response()->json([
                 $validator->errors()
-            ],400);
+            ],422);
         }
-        
-        $user = User::where('email',$request->email)->first();
-        
-        // if user not found or cred not matched
-        if(!$user || !Hash::check($request->password,$user->password)){
-            return response()->json([
-                'message'=> 'Credentials Not Matched'
-            ],401);
-        };
-        $otpInitiate = new Otp;
-        $otpObj = $otpInitiate->validate($request->email, $request->otp);
-        $token = $user->createToken('myapptoken')->plainTextToken;
-        if($otpObj->status == true){
-            return response()->json([
-                'status'=>true,
-                'message'=>'User Logged in',
-                'user'=>$user,
-                'token'=>$token
-            ],200);
-        }else{
-            return response()->json($otpObj,201);
-        };
-        
-        if($otp != null){
-
-            $object_arr = array('to'=>$request->email,'name'=>$user->name,'code'=>$otp,'userName'=>'','password'=>'');
-            Mail::send('mail', $object_arr, function($message) use ($object_arr){
-                $message->to($object_arr['to'], $object_arr['name'])->subject('Verify Otp');
-                $message->from('no-reply@nasenicertveri.com','Naseni Certveri'); 
-             });
-
-            // $this->sendMail('Verify Otp',array('to'=>$request->email,'name'=>$user->name,'code'=>$otp));
-        }
-    
+        $password =$request->password;
+        $full_name = $request->first_name." ".$request->last_name;
+        $user = User::create( [
+            'name'=>$full_name,
+            'username'=>$request->email,
+            'email'=>$request->email,
+            'password'=>  bcrypt($password),
+            'role_id'=>  $request->role_id,
+        ] );
+        return response()->json([
+            'message'=>'User Created',
+            'data'=> $user,
+        ],201);
 
     }
     /**
-     * Send Mail
-     */
-    public function sendMail($subject,$object) {
-        Mail::send('mail', $object, function($message) {
-           $message->to($object->to, $object->name)->subject($subject);
-           $message->from('no-reply@nasenicertveri.com','Naseni Certveri'); 
-        });
-     }
-    /**
      * logout function
     */
-
     public function logout(Request $request){
         auth()->user()->tokens()->delete();
 

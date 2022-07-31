@@ -33,7 +33,6 @@ class UserController extends Controller
             'username'=>'required|string|unique:users,username',
             'email'=>'required|string|unique:users,email',
             'password'=>'required|string|confirmed',
-            'status'=>'required|string',
 
         ]);
 
@@ -48,43 +47,8 @@ class UserController extends Controller
             'username'=>$request->username,
             'email'=>$request->email,
             'password'=>  bcrypt($password),
-            'country'=>$request->country?$request->country:"",
-            'phone'=>$request->phone?$request->phone:"",
-            'account_id'=>$request->account_id?$request->account_id:null,
-            'group_id'=>$request->group_id?$request->group_id:null,
-            'role_id'=>$request->role_id?$request->role_id:null,
-            'fixed_fees'=>$request->fixed_fees?$request->fixed_fees:null,
             'status'=>$request->status?$request->status:null,
-            'allow_users'=>$request->allow_users?$request->allow_users:0,
-            'allow_verifiers'=>$request->allow_verifiers?$request->allow_verifiers:0,
-            'allow_institutes'=>$request->allow_institutes?$request->allow_institutes:0,
-            'allow_groups'=>$request->allow_groups?$request->allow_groups:0,
-            'allow_reports'=>$request->allow_reports?$request->allow_reports:0,
-            'allow_settings'=>$request->allow_settings?$request->allow_settings:0,
-            'allow_invoices'=>$request->allow_invoices?$request->allow_invoices:0,
-            'add_users' => $request->add_users?$request->add_users:0,
-            'edit_users' => $request->edit_users?$request->edit_users:0,
-            'del_users' => $request->del_users?$request->del_users:0,
-            'add_verifiers' => $request->add_verifiers?$request->add_verifiers:0,
-            'edit_verifiers' => $request->edit_verifiers?$request->edit_verifiers:0,
-            'del_verifiers' => $request->del_verifiers?$request->del_verifiers:0,
-            'add_institutes' => $request->add_institutes?$request->add_institutes:0,
-            'edit_institutes' => $request->edit_institutes?$request->edit_institutes:0,
-            'del_institutes' => $request->del_institutes?$request->del_institutes:0,
-            'add_groups' => $request->add_groups?$request->add_groups:0,
-            'edit_groups' => $request->edit_groups?$request->edit_groups:0,
-            'del_groups' => $request->del_groups?$request->del_groups:0,
-            'allow_new_verification' => $request->allow_new_verification?$request->allow_new_verification:0,
-            'allow_verifications' => $request->allow_verifications?$request->allow_verifications:0,
-            'parent_verifier_id' => $request->parent_verifier_id?$request->parent_verifier_id:0,
         ] );
-        $user->allow_invoices = $request->allow_invoices?$request->allow_invoices:0;
-        $user->save();
-        $object_arr = array('to'=>$user->email,'name'=>$user->name,'code'=>'','url'=>env('MAIL_SIGNIN_URL'),'userName'=>$user->email,'password'=>$password);
-            Mail::send('mail', $object_arr, function($message) use ($object_arr){
-                $message->to($object_arr['to'], $object_arr['name'])->subject('Welcome to Naseni Certveri');
-                $message->from('no-reply@nasenicertveri.com','Naseni Certveri'); 
-             });
         return response()->json([
             'message'=>'User Created',
             'data'=> $user,
@@ -146,78 +110,19 @@ class UserController extends Controller
                 $user = $user->update([
                     'name'=>$request->name?$request->name:$user->name,
                     'password'=> bcrypt($request->password),
-                    'country'=>$request->country?$request->country:"",
                     'email'=>$request->email?$request->email:$user->email,
-                    'phone'=>$request->phone?$request->phone:"",
-                    'account_id'=>$request->account_id?$request->account_id:null,
-                    'group_id'=>$request->group_id?$request->group_id:null,
                     'role_id'=>$request->role_id?$request->role_id:null,
-                    'fixed_fees'=>$request->fixed_fees?$request->fixed_fees:null,
-                    'status'=>$request->status?$request->status:null,
-                    'allow_users'=>$request->allow_users?$request->allow_users:0,
-                    'allow_verifiers'=>$request->allow_verifiers?$request->allow_verifiers:0,
-                    'allow_institutes'=>$request->allow_institutes?$request->allow_institutes:0,
-                    'allow_groups'=>$request->allow_groups?$request->allow_groups:0,
-                    'allow_reports'=>$request->allow_reports?$request->allow_reports:0,
-                    'allow_settings'=>$request->allow_settings?$request->allow_settings:0,
-                    'allow_invoices'=>$request->allow_invoices?$request->allow_invoices:0,
-                    'add_users' => $request->add_users?$request->add_users:0,
-                    'edit_users' => $request->edit_users?$request->edit_users:0,
-                    'del_users' => $request->del_users?$request->del_users:0,
-                    'add_verifiers' => $request->add_verifiers?$request->add_verifiers:0,
-                    'edit_verifiers' => $request->edit_verifiers?$request->edit_verifiers:0,
-                    'del_verifiers' => $request->del_verifiers?$request->del_verifiers:0,
-                    'add_institutes' => $request->add_institutes?$request->add_institutes:0,
-                    'edit_institutes' => $request->edit_institutes?$request->edit_institutes:0,
-                    'del_institutes' => $request->del_institutes?$request->del_institutes:0,
-                    'add_groups' => $request->add_groups?$request->add_groups:0,
-                    'edit_groups' => $request->edit_groups?$request->edit_groups:0,
-                    'del_groups' => $request->del_groups?$request->del_groups:0,
-                    'allow_new_verification' => $request->allow_new_verification?$request->allow_new_verification:0,
-                    'allow_verifications' => $request->allow_verifications?$request->allow_verifications:0,
-                    'parent_verifier_id' => $request->parent_verifier_id?$request->parent_verifier_id:0,
-                        
+                    'status'=>$request->status?$request->status:null,                        
                 ]);
         
             }else{
                 $user = $user->update([
                     'name'=>$request->name?$request->name:$user->name,
-                    'country'=>$request->country?$request->country:"",
-                    'phone'=>$request->phone?$request->phone:"",
-                    'account_id'=>$request->account_id?$request->account_id:null,
                     'email'=>$request->email?$request->email:$user->email,
-                    'group_id'=>$request->group_id?$request->group_id:null,
                     'role_id'=>$request->role_id?$request->role_id:null,
-                    'fixed_fees'=>$request->fixed_fees?$request->fixed_fees:null,
                     'status'=>$request->status?$request->status:null,
-                    'allow_users'=>$request->allow_users?$request->allow_users:0,
-                    'allow_verifiers'=>$request->allow_verifiers?$request->allow_verifiers:0,
-                    'allow_institutes'=>$request->allow_institutes?$request->allow_institutes:0,
-                    'allow_groups'=>$request->allow_groups?$request->allow_groups:0,
-                    'allow_reports'=>$request->allow_reports?$request->allow_reports:0,
-                    'allow_settings'=>$request->allow_settings?$request->allow_settings:0, 
-                    'allow_invoices'=>$request->allow_invoices?$request->allow_invoices:0,
-                    'add_users' => $request->add_users?$request->add_users:0,
-                    'edit_users' => $request->edit_users?$request->edit_users:0,
-                    'del_users' => $request->del_users?$request->del_users:0,
-                    'add_verifiers' => $request->add_verifiers?$request->add_verifiers:0,
-                    'edit_verifiers' => $request->edit_verifiers?$request->edit_verifiers:0,
-                    'del_verifiers' => $request->del_verifiers?$request->del_verifiers:0,
-                    'add_institutes' => $request->add_institutes?$request->add_institutes:0,
-                    'edit_institutes' => $request->edit_institutes?$request->edit_institutes:0,
-                    'del_institutes' => $request->del_institutes?$request->del_institutes:0,
-                    'add_groups' => $request->add_groups?$request->add_groups:0,
-                    'edit_groups' => $request->edit_groups?$request->edit_groups:0,
-                    'del_groups' => $request->del_groups?$request->del_groups:0,
-                    'allow_new_verification' => $request->allow_new_verification?$request->allow_new_verification:0,
-                    'allow_verifications' => $request->allow_verifications?$request->allow_verifications:0,
-                    'parent_verifier_id' => $request->parent_verifier_id?$request->parent_verifier_id:0,
                 ]);
             }
-            
-            $user = User::find($id);
-            $user->allow_invoices = $request->allow_invoices?$request->allow_invoices:0;
-            $user->save();
             return response()->json([
                 'message'=>'User Updated',
                 'data'=> $user,
@@ -267,41 +172,69 @@ class UserController extends Controller
     }
 
     /**
-     * get all Verifiers users from storage.
+     * get all Clients users from storage.
      *
      * @return \Illuminate\Http\Response
      */
 
-    public function getAllVerifiers(){
-        return User::leftJoin('groups','groups.id','users.group_id')
-        ->select(
-            'users.id',
-            'users.role_id',
-            'users.group_id',
-            'users.name',
-            'users.username',
-            'users.email',
-            'users.created_at',
-            'users.country',
-            'users.fixed_fees',
-            'groups.name as group_name',
-            'users.status',
-            'users.phone',
-            'users.account_id'
-        )
-        ->where('role_id',2)->orderBy('id','desc')->get();
+    public function getAllClients(){
+        return User::where('role_id',2)->orderBy('id','desc')->get();    
     }
 
+    /**
+     * Update the specified resource's service type in storage.
+     */
+    public function serviceOptions(Request $request)
+    {
+        $user = User::find($request->user_id);
 
-    public function getStaff(Request $request){
+        //if user found
+        if($user){
+            $page_content = null;
+            if($request->hasFile('page_content')){
+                $file = $request->file('page_content');
+                $file_name = time()."_".$file->getClientOriginalName();
+                $file->move(public_path('content'),$file_name);
+                $page_content = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
+            }
+            $privacy_content = null;
+            if($request->hasFile('privacy_content')){
+                $file = $request->file('privacy_content');
+                $file_name = time()."_".$file->getClientOriginalName();
+                $file->move(public_path('content'),$file_name);
+                $privacy_content = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
+            }
+            $terms_content = null;
+            if($request->hasFile('terms_content')){
+                $file = $request->file('terms_content');
+                $file_name = time()."_".$file->getClientOriginalName();
+                $file->move(public_path('content'),$file_name);
+                $terms_content = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
+            }
 
-        $uers =  User::where('role_id',3);    
-        if(isset($request->parent_verifier_id) && $request->parent_verifier_id>0){
-            $uers->where('parent_verifier_id',$request->parent_verifier_id);
+            $user = $user->update([
+                'service_type'=>$request->service_type?$request->service_type:"pending",
+                'page_type'=>$request->page_type?$request->page_type:null,
+                'branding'=>$request->branding?$request->branding:null,
+                'funnel_platform'=>$request->funnel_platform?$request->funnel_platform:null,
+                'funnel_emails'=>$request->funnel_emails?$request->funnel_emails:null,
+                'page_content'=>$page_content,
+                'privacy_content'=>$privacy_content,
+                'terms_content'=>$terms_content,
+                'service_status'=>$request->service_status?$request->service_status:null,
+            ]);
+            return response()->json([
+                'message'=>'User Updated',
+                'data'=> $user,
+            ],200);
+                
+        }else{
+            return response()->json([
+                'message'=>'User Not Found',
+            ],404);
         }
-        $uers =  $uers->orderBy('id','desc')->get();    
-    
-        return $uers; 
+
+
     }
 
 
