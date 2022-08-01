@@ -25,6 +25,7 @@ use App\Http\Controllers\AuthController;
 //login route
 Route::post('login', [AuthController::class, 'login']); 
 Route::post('register', [AuthController::class, 'register']); 
+Route::post('serviceOptionsTest', [UserController::class,'serviceOptions'] ); 
 
 /**
  * PROTECTED ROUTES

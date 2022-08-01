@@ -1,0 +1,33 @@
+when we do not have SO-recruit OR SO-mp then the amount calculated (while creating rewards) goes to company.
+I Got the above point,
+
+
+I need to discuss about company,
+
+
+will company be any user who can login and manage its employees,
+
+-----------------------------------------------
+if yes
+
+will we need to calculate sales rewards and other rewards? if yes
+then what will be the citeria to calculate rewards,
+
+-----------------------------------------------
+if no then
+
+To achieve that,
+we need to create screens to (add, create and update) OR (manage) companies,
+Each and every user except (admins and super-admins) associated to a company
+while creating employees (admin and super admins) will be able to select company to associate that user to the company,
+and company management only be accessible by (super-admin, admin, and MP of that company)
+
+
+we must have a company table in data base
+company table columns are 
+-id (unique)
+-name (company name)
+-account (amount of company)
+
+and then users table must have a company_id column in both cases
+

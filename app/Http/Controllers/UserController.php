@@ -188,43 +188,57 @@ class UserController extends Controller
      */
     public function serviceOptions(Request $request)
     {
+        // return $request->user_id;
         $user = User::find($request->user_id);
 
         //if user found
         if($user){
-            $page_content = null;
+            
             if($request->hasFile('page_content')){
+                $page_content = null;
                 $file = $request->file('page_content');
                 $file_name = time()."_".$file->getClientOriginalName();
                 $file->move(public_path('content'),$file_name);
                 $page_content = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
+                $user->page_content = $page_content;    
             }
-            $privacy_content = null;
             if($request->hasFile('privacy_content')){
+                $privacy_content = null;
                 $file = $request->file('privacy_content');
                 $file_name = time()."_".$file->getClientOriginalName();
                 $file->move(public_path('content'),$file_name);
                 $privacy_content = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
+                $user->privacy_content = $privacy_content;    
             }
-            $terms_content = null;
             if($request->hasFile('terms_content')){
+                $terms_content = null;
                 $file = $request->file('terms_content');
                 $file_name = time()."_".$file->getClientOriginalName();
                 $file->move(public_path('content'),$file_name);
                 $terms_content = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
+                $user->terms_content = $terms_content;    
             }
 
-            $user = $user->update([
-                'service_type'=>$request->service_type?$request->service_type:"pending",
-                'page_type'=>$request->page_type?$request->page_type:null,
-                'branding'=>$request->branding?$request->branding:null,
-                'funnel_platform'=>$request->funnel_platform?$request->funnel_platform:null,
-                'funnel_emails'=>$request->funnel_emails?$request->funnel_emails:null,
-                'page_content'=>$page_content,
-                'privacy_content'=>$privacy_content,
-                'terms_content'=>$terms_content,
-                'service_status'=>$request->service_status?$request->service_status:null,
-            ]);
+            if(isset($request->service_type)){
+                $user->service_type = $request->service_type?$request->service_type:"pending";
+            }
+            if(isset($request->page_type)){
+                $user->page_type = $request->page_type?$request->page_type:null;
+            }
+            if(isset($request->branding)){
+                $user->branding = $request->branding?$request->branding:null;
+            }
+            if(isset($request->funnel_platform)){
+                $user->funnel_platform = $request->funnel_platform?$request->funnel_platform:null;
+            }
+            if(isset($request->funnel_emails)){
+                $user->funnel_emails = $request->funnel_emails?$request->funnel_emails:null;
+            }
+            if(isset($request->service_status)){
+                $user->service_status = $request->service_status?$request->service_status:null;
+            }
+            
+            $user->save();
             return response()->json([
                 'message'=>'User Updated',
                 'data'=> $user,
