@@ -24,8 +24,8 @@ class CreateUsersTable extends Migration
             $table->string('status')->nullable();
             $table->string('invite_code')->nullable();
             $table->enum('service_type',['funnel','webpage','pending'])->default('pending');
-            $table->integer('page_type')->nullable();
             $table->integer('branding')->nullable();
+            $table->integer('template')->nullable();
             $table->integer('funnel_platform')->nullable();
             $table->string('funnel_emails')->nullable();
             $table->string('page_content')->nullable();

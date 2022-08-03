@@ -194,16 +194,14 @@ class UserController extends Controller
         //if user found
         if($user){
             
-            if($request->hasFile('page_content')){
-                $page_content = null;
+            if(isset($request->page_content ) && $request->hasFile('page_content')){
                 $file = $request->file('page_content');
                 $file_name = time()."_".$file->getClientOriginalName();
                 $file->move(public_path('content'),$file_name);
                 $page_content = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
                 $user->page_content = $page_content;    
             }
-            if($request->hasFile('privacy_content')){
-                $privacy_content = null;
+            if(isset($request->privacy_content ) && $request->hasFile('privacy_content')){
                 $file = $request->file('privacy_content');
                 $file_name = time()."_".$file->getClientOriginalName();
                 $file->move(public_path('content'),$file_name);
@@ -227,6 +225,8 @@ class UserController extends Controller
             }
             if(isset($request->branding)){
                 $user->branding = $request->branding?$request->branding:null;
+            }if(isset($request->template)){
+                $user->template = $request->template?$request->template:null;
             }
             if(isset($request->funnel_platform)){
                 $user->funnel_platform = $request->funnel_platform?$request->funnel_platform:null;
