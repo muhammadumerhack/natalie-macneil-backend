@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\LearningController;
 
 
 /*
@@ -44,6 +45,10 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::get('users_admin', [UserController::class,'getAllAdminUsers'] ); 
     Route::get('users_clients', [UserController::class,'getAllClients'] ); 
 
+    // Learning Routs
+    Route::resource('learnings', LearningController::class ); 
+    Route::post('markCompleted', [LearningController::class,'markChapterCompleted'] ); 
+    Route::get('getCourseLearnings', [LearningController::class,'getLearningWRTCourse'] ); 
     
 
 });

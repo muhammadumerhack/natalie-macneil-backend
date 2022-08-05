@@ -26,7 +26,7 @@ class User extends Authenticatable
         'status',
         'invite_code',
         'service_type',
-        'page_type',
+        'template',
         'branding',
         'funnel_platform',
         'funnel_emails',
