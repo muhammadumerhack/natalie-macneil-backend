@@ -96,7 +96,6 @@ class LearningController extends Controller
     public function update(Request $request, $id)
     {
         $learning = Learning::find($id);
-
         //if user found
         if($learning){
 
@@ -130,7 +129,7 @@ class LearningController extends Controller
             $learning->save();            
             return response()->json([
                 'message'=>'Learning Updated',
-                'data'=> $learning,
+                'data'=> $request,
             ],200);
                 
         }else{

@@ -15,7 +15,7 @@ class CreateLearningsTable extends Migration
     {
         Schema::create('learnings', function (Blueprint $table) {
             $table->id();
-            $table->integer('title');
+            $table->string('title');
             $table->string('description')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('video_link')->nullable();
