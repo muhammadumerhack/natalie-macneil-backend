@@ -48,6 +48,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     // Learning Routs
     Route::resource('learnings', LearningController::class ); 
     Route::post('markCompleted', [LearningController::class,'markChapterCompleted'] ); 
+    Route::post('updateLearningData/{id}', [LearningController::class,'updateLearningData'] ); 
     Route::get('getCourseLearnings', [LearningController::class,'getLearningWRTCourse'] ); 
     
 

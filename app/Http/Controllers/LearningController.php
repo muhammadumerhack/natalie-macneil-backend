@@ -99,7 +99,7 @@ class LearningController extends Controller
         //if user found
         if($learning){
 
-            
+            $thumbnail = "";
             if(isset($request->thumbnail ) && $request->hasFile('thumbnail')){
                 $file = $request->file('thumbnail');
                 $file_name = time()."_".$file->getClientOriginalName();
@@ -129,7 +129,7 @@ class LearningController extends Controller
             $learning->save();            
             return response()->json([
                 'message'=>'Learning Updated',
-                'data'=> $request,
+                'data'=> $thumbnail,
             ],200);
                 
         }else{
@@ -214,9 +214,9 @@ class LearningController extends Controller
         $learnings = Learning::where('course_id',$request->course_id)->get();
         if($request->user_id){
             foreach ($learnings as $learning) {
-                $CompletedLearning = CompletedLearning::where('user_id',$request->user_id)->where('chapter_id',$learning)->first();
-                if($CompletedLearning){
-                    $learning->is_completed = $CompletedLearning->status;
+                $completedLearning = CompletedLearning::where('user_id',$request->user_id)->where('chapter_id',$learning->id)->first();
+                if($completedLearning){
+                    $learning->is_completed = $completedLearning->status;
                 }else{
                     $learning->is_completed = 0;
                 }
@@ -229,5 +229,55 @@ class LearningController extends Controller
         ],200);
 
     }
+
+
+    public function updateLearningData(Request $request, $id)
+    {
+        $learning = Learning::find($id);
+        //if user found
+        if($learning){
+
+            
+            if(isset($request->thumbnail ) && $request->hasFile('thumbnail') && $request->thumbnail!= null){
+                $file = $request->file('thumbnail');
+                $file_name = time()."_".$file->getClientOriginalName();
+                $file->move(public_path('content'),$file_name);
+                $thumbnail = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
+                $learning->thumbnail = $thumbnail;    
+                $learning->save();
+            }
+            if(isset($request->title)){
+                $learning->title = $request->title;
+            }
+            if(isset($request->description)){
+                $learning->description = $request->description;
+            }
+            if(isset($request->thumbnail)){
+                $learning->thumbnail = $request->thumbnail;
+            }
+            if(isset($request->video_link)){
+                $learning->video_link = $request->video_link;
+            }
+            if(isset($request->course_id)){
+                $learning->course_id = $request->course_id;
+            }
+            if(isset($request->status)){
+                $learning->status = $request->status;
+            }
+            
+            $learning->save();            
+            return response()->json([
+                'message'=>'Learning Updated',
+                'data'=> $request,
+            ],200);
+                
+        }else{
+            return response()->json([
+                'message'=>'User Not Found',
+            ],404);
+        }
+
+    }
+
 
 }
