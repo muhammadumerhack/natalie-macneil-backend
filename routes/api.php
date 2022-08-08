@@ -6,6 +6,7 @@ use App\Http\Controllers\InstituteController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LearningController;
+use App\Http\Controllers\SettingsController;
 
 
 /*
@@ -51,6 +52,9 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
     Route::post('updateLearningData/{id}', [LearningController::class,'updateLearningData'] ); 
     Route::get('getCourseLearnings', [LearningController::class,'getLearningWRTCourse'] ); 
     
+
+    //Settings Routes
+    Route::post('saveSettings', [SettingsController::class,'saveSettings'] ); 
 
 });
 

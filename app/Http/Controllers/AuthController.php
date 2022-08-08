@@ -7,6 +7,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
+use App\Models\Setting;
 class AuthController extends Controller
 {
     /**
@@ -34,6 +35,11 @@ class AuthController extends Controller
             ],401);
         }
         $token = $user->createToken('myapptoken')->plainTextToken;
+        $setting = Setting::find(1);
+        $user->is_form_enabled = "no";
+        if($setting){
+            $user->is_form_enabled = $setting->value;
+        }
         return response()->json([
             'status'=>true,
             'message'=>'User Logged in',

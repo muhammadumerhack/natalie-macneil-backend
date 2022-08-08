@@ -238,22 +238,19 @@ class LearningController extends Controller
         if($learning){
 
             
-            if(isset($request->thumbnail ) && $request->hasFile('thumbnail') && $request->thumbnail!= null){
-                $file = $request->file('thumbnail');
+            if(isset($request->thumbnail ) && $request->hasFile('thumbnail') && $request->thumbnail != null){
+                $file = $request->file('thumbnail');    
                 $file_name = time()."_".$file->getClientOriginalName();
+
                 $file->move(public_path('content'),$file_name);
                 $thumbnail = env('APPLICATION_URL').'natalie-macneil-backend/public/content/'.$file_name;
                 $learning->thumbnail = $thumbnail;    
-                $learning->save();
             }
             if(isset($request->title)){
                 $learning->title = $request->title;
             }
             if(isset($request->description)){
                 $learning->description = $request->description;
-            }
-            if(isset($request->thumbnail)){
-                $learning->thumbnail = $request->thumbnail;
             }
             if(isset($request->video_link)){
                 $learning->video_link = $request->video_link;
