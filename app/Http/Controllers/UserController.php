@@ -219,13 +219,15 @@ class UserController extends Controller
 
             if(isset($request->service_type)){
                 $user->service_type = $request->service_type?$request->service_type:"pending";
+                $this->kartraAddTag($user->email,$request->service_type);
             }
             if(isset($request->page_type)){
                 $user->page_type = $request->page_type?$request->page_type:null;
             }
             if(isset($request->branding)){
                 $user->branding = $request->branding?$request->branding:null;
-            }if(isset($request->template)){
+            }
+            if(isset($request->template)){
                 $user->template = $request->template?$request->template:null;
             }
             if(isset($request->funnel_platform)){
@@ -253,5 +255,50 @@ class UserController extends Controller
 
     }
 
+
+    function kartraAddTag($email,$service_type){
+
+        $tag = "NM Funnel bonus";
+        if($service_type == "webpage"){
+            $tag = "NM Mini Site Bonus";
+        }
+    
+        // funnel
+        // webpage
+        $ch = curl_init();
+        // CONNECT TO THE API SYSTEM VIA THE APP ID, AND VERIFY MY API KEY AND PASSWORD, IDENTIFY THE LEAD, AND SEND THE ACTIONS…
+        curl_setopt($ch, CURLOPT_URL,"https://app.kartra.com/api");
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS,
+        http_build_query(
+                array(
+                    'app_id' => 'QYVUtgNszLmK',
+                    'api_key' => 'wyazMKZW',
+                    'api_password' => 'crzQeEqAOHtl',
+                    'lead' => array(
+                        'email' => $email,
+                    ),
+                    'actions' => array(
+                        '0' =>array(
+                            'cmd' => 'assign_tag',
+                            'tag_name' => $tag
+                        ),
+                    )
+                )
+            )
+        );
+        // REQUEST CONFIRMATION MESSAGE FROM API…
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec ($ch);
+        curl_close ($ch);
+        $server_json = json_decode($server_output);
+        
+        // **Status**
+        //"Error"
+        //"Success"
+        // CONDITIONAL FOR FURTHER INSTRUCTIONS…
+        return $server_json->status;
+    
+    }
 
 }
