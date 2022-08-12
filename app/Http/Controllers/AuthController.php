@@ -65,6 +65,18 @@ class AuthController extends Controller
                 $validator->errors()
             ],422);
         }
+        $invite_code = "";
+        $setting = Setting::where('key', 'invite_code')->first();
+        if($setting){
+            $invite_code = $setting->value;
+        }
+
+        if($invite_code != $request->invite_code){
+            return response()->json([
+                'message'=>'invalid'
+            ],200);
+        }
+
         $password =$request->password;
         $full_name = $request->first_name." ".$request->last_name;
         $user = User::create( [
