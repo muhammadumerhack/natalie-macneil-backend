@@ -43,8 +43,8 @@ class SettingsController extends Controller
     }
 
 
-    public function inviteCode(){
-        $setting = Setting::where('key', 'invite_code')->first();
+    public function getSettingsByKey($key){
+        $setting = Setting::where('key', $key)->first();
         if($setting){
             return response()->json([
                 'message'=>'invite code',

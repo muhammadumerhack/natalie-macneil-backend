@@ -219,7 +219,9 @@ class UserController extends Controller
 
             if(isset($request->service_type)){
                 $user->service_type = $request->service_type?$request->service_type:"pending";
-                $this->kartraAddTag($user->email,$request->service_type);
+                if($user->service_type != "pending"){
+                    $this->kartraAddTag($user->email,$request->service_type);
+                }
             }
             if(isset($request->page_type)){
                 $user->page_type = $request->page_type?$request->page_type:null;

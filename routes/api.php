@@ -55,7 +55,7 @@ Route::group(['middleware'=>['auth:sanctum']],function(){
 
     //Settings Routes
     Route::post('saveSettings', [SettingsController::class,'saveSettings'] ); 
-    Route::get('invite_code', [SettingsController::class,'inviteCode'] ); 
+    Route::get('get_settings/{key}', [SettingsController::class,'getSettingsByKey'] ); 
 
 });
 

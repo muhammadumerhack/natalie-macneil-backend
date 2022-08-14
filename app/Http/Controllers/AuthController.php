@@ -35,10 +35,15 @@ class AuthController extends Controller
             ],401);
         }
         $token = $user->createToken('myapptoken')->plainTextToken;
-        $setting = Setting::find(1);
+        $setting = Setting::where('key','is_form_enabled')->first();
         $user->is_form_enabled = "no";
         if($setting){
             $user->is_form_enabled = $setting->value;
+        }
+        $setting = Setting::where('key','is_learning_enabled')->first();
+        $user->is_learning_enabled = "no";
+        if($setting){
+            $user->is_learning_enabled = $setting->value;
         }
         return response()->json([
             'status'=>true,
@@ -114,6 +119,18 @@ class AuthController extends Controller
     public function verifyToken(Request $request){
         // $token = request()->user()->currentAccessToken()->token;
         $user = auth()->user();
+
+        $setting = Setting::where('key','is_form_enabled')->first();
+        $user->is_form_enabled = "no";
+        if($setting){
+            $user->is_form_enabled = $setting->value;
+        }
+        $setting = Setting::where('key','is_learning_enabled')->first();
+        $user->is_learning_enabled = "no";
+        if($setting){
+            $user->is_learning_enabled = $setting->value;
+        }
+        
         $token = $request->bearerToken();
 
         return response()->json([
