@@ -241,6 +241,9 @@ class UserController extends Controller
             if(isset($request->service_status)){
                 $user->service_status = $request->service_status?$request->service_status:null;
             }
+            if(isset($request->reset_request)){
+                $user->reset_request = $request->reset_request?$request->reset_request:null;
+            }
             
             $user->save();
             return response()->json([

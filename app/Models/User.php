@@ -33,7 +33,8 @@ class User extends Authenticatable
         'page_content',
         'privacy_content',
         'terms_content',
-        'service_status'
+        'service_status',
+        'reset_request'
     ];
 
     /**
