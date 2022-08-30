@@ -40,9 +40,9 @@ class LearningController extends Controller
             ],422);
         }
         $learning = Learning::create( [
-            'title'=>$request->title?$request->title:null,
-            'description'=>$request->description?$request->description:null,
-            'video_link'=>$request->video_link?$request->video_link:null,
+            'title'=>$request->title?$request->title:"",
+            'description'=>$request->description?$request->description:"",
+            'video_link'=>$request->video_link?$request->video_link:"",
             'course_id'=>$request->course_id?$request->course_id:null,
         ]);
 
@@ -110,14 +110,18 @@ class LearningController extends Controller
             if(isset($request->title)){
                 $learning->title = $request->title;
             }
-            if(isset($request->description)){
-                $learning->description = $request->description;
+            if(isset($request->description) && $request->description != "" && $request->description != NULL){
+                $learning->description = $request->description?$request->description:"";
+            }else{
+                $learning->description = "";
             }
             if(isset($request->thumbnail)){
-                $learning->thumbnail = $request->thumbnail;
+                $learning->thumbnail = $request->thumbnail?$request->thumbnail:"";
             }
-            if(isset($request->video_link)){
-                $learning->video_link = $request->video_link;
+            if(isset($request->video_link) && $request->video_link!="" && $request->video_link!=NULL){
+                $learning->video_link = $request->video_link?$request->video_link:"";
+            }else{
+                $learning->video_link = "";   
             }
             if(isset($request->course_id)){
                 $learning->course_id = $request->course_id;
@@ -249,11 +253,15 @@ class LearningController extends Controller
             if(isset($request->title)){
                 $learning->title = $request->title;
             }
-            if(isset($request->description)){
-                $learning->description = $request->description;
+            if(isset($request->description) && $request->description != "" && $request->description != NULL){
+                $learning->description = $request->description?$request->description:"";
+            }else{
+                $learning->description = "";
             }
-            if(isset($request->video_link)){
-                $learning->video_link = $request->video_link;
+            if(isset($request->video_link) && $request->video_link!="" && $request->video_link!=NULL){
+                $learning->video_link = $request->video_link?$request->video_link:"";
+            }else{
+                $learning->video_link = "";
             }
             if(isset($request->course_id)){
                 $learning->course_id = $request->course_id;
