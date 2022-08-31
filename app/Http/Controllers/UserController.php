@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Models\User;
 use Mail;
+use App\Mail\ResetChoice;
 class UserController extends Controller
 {
     /**
@@ -242,7 +243,12 @@ class UserController extends Controller
                 $user->service_status = $request->service_status?$request->service_status:null;
             }
             if(isset($request->reset_request)){
-                $user->reset_request = $request->reset_request?$request->reset_request:null;
+                // $user->reset_request = $request->reset_request?$request->reset_request:null;
+                $data = ['email' => $user->email ];
+                Mail::send('resetChoiceMail',$data,function($messages) use ($user){
+                    $messages->to('Kerry@funnelsketchers.com');
+                    $messages->subject('Reset Coice Request');
+                });
             }
             
             $user->save();
