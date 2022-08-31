@@ -243,12 +243,15 @@ class UserController extends Controller
                 $user->service_status = $request->service_status?$request->service_status:null;
             }
             if(isset($request->reset_request)){
-                // $user->reset_request = $request->reset_request?$request->reset_request:null;
-                $data = ['email' => $user->email ];
-                Mail::send('resetChoiceMail',$data,function($messages) use ($user){
-                    $messages->to('Kerry@funnelsketchers.com');
-                    $messages->subject('Reset Coice Request');
-                });
+                $user->reset_request = $request->reset_request?$request->reset_request:null;
+                if($user->reset_request == 1){
+                    $data = ['email' => $user->email ];
+                    Mail::send('resetChoiceMail',$data,function($messages) use ($user){
+                        $messages->to('Kerry@funnelsketchers.com');
+                        $messages->subject('Reset Coice Request');
+                    });
+    
+                }
             }
             
             $user->save();
