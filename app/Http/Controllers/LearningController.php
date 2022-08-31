@@ -18,7 +18,7 @@ class LearningController extends Controller
      */
     public function index()
     {
-        return Learning::orderby('ordering','ASC')->get();
+        return Learning::all();
     }
 
     /**
@@ -219,7 +219,7 @@ class LearningController extends Controller
                 $validator->errors()
             ],422);
         }
-        $learnings = Learning::where('course_id',$request->course_id)->get();
+        $learnings = Learning::where('course_id',$request->course_id)->orderby('ordering','ASC')->get();
         if($request->user_id){
             foreach ($learnings as $learning) {
                 $completedLearning = CompletedLearning::where('user_id',$request->user_id)->where('chapter_id',$learning->id)->first();
