@@ -17,6 +17,7 @@ class Learning extends Model
         'thumbnail',
         'video_link',
         'course_id',
+        'ordering',
         'status'
     ];
 

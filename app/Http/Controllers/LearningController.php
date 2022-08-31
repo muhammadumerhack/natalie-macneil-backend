@@ -18,7 +18,7 @@ class LearningController extends Controller
      */
     public function index()
     {
-        return Learning::all();
+        return Learning::orderby('ordering','ASC')->get();
     }
 
     /**
@@ -44,6 +44,7 @@ class LearningController extends Controller
             'description'=>$request->description?$request->description:"",
             'video_link'=>$request->video_link?$request->video_link:"",
             'course_id'=>$request->course_id?$request->course_id:null,
+            'ordering'=>$request->ordering?$request->ordering:1,
         ]);
 
         if(isset($request->thumbnail ) && $request->hasFile('thumbnail')){
@@ -128,6 +129,9 @@ class LearningController extends Controller
             }
             if(isset($request->status)){
                 $learning->status = $request->status;
+            }
+            if(isset($request->ordering)){
+                $learning->ordering = $request->ordering;
             }
             
             $learning->save();            
@@ -268,6 +272,9 @@ class LearningController extends Controller
             }
             if(isset($request->status)){
                 $learning->status = $request->status;
+            }
+            if(isset($request->ordering)){
+                $learning->ordering = $request->ordering;
             }
             
             $learning->save();            

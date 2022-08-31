@@ -20,6 +20,7 @@ class CreateLearningsTable extends Migration
             $table->string('thumbnail')->nullable();
             $table->string('video_link')->nullable();
             $table->integer('course_id')->nullable();
+            $table->integer('ordering')->default(1);
             $table->integer('status')->default(0);
             $table->timestamps();
         });
