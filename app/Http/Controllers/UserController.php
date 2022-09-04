@@ -248,7 +248,7 @@ class UserController extends Controller
                     $data = ['email' => $user->email ];
                     Mail::send('resetChoiceMail',$data,function($messages) use ($user){
                         $messages->to('Kerry@funnelsketchers.com');
-                        $messages->subject('Reset Coice Request');
+                        $messages->subject('Coaching Evolved (Web App) - Choice Reset Request');
                     });
     
                 }

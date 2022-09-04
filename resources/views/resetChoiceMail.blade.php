@@ -1,4 +1,4 @@
 
 <div>
-{{$email}} requestes to reset choice
+{{$email}}  - has requested to reset their opted choice.
 </div>
